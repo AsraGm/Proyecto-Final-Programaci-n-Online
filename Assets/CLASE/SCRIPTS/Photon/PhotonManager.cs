@@ -19,7 +19,7 @@ public class PhotonManager : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] Dictionary<PlayerRef,NetworkObject> players = new Dictionary<PlayerRef, NetworkObject>(); // PlayerRef es el ID de nuestro jugador en la red, NetwokrObject es el prefab/objeto de nuestro jugador
 
     [SerializeField] UnityEvent onPlayerJoinedToGame; // Los UnityEvents son llamadas que se hacen al invocar un evento
-
+    List<SessionInfo> availableSessions = new List<SessionInfo>();
     #region Metodos de Photon
     /// <summary>
     /// 
@@ -75,6 +75,11 @@ public class PhotonManager : MonoBehaviour, INetworkRunnerCallbacks
         input.Set(data);
     }
 
+    //se llama cada que se inicie sesion, actualiza la lista
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
+    {
+        availableSessions = sessionList;
+    }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
     {
     }
@@ -125,10 +130,6 @@ public class PhotonManager : MonoBehaviour, INetworkRunnerCallbacks
     }
 
     public void OnSceneLoadStart(NetworkRunner runner)
-    {
-    }
-
-    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
     }
 
