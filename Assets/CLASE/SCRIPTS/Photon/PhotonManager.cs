@@ -19,15 +19,15 @@ public class PhotonManager : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] Dictionary<PlayerRef,NetworkObject> players = new Dictionary<PlayerRef, NetworkObject>(); // PlayerRef es el ID de nuestro jugador en la red, NetwokrObject es el prefab/objeto de nuestro jugador
 
     [SerializeField] UnityEvent onPlayerJoinedToGame; // Los UnityEvents son llamadas que se hacen al invocar un evento
-    List<SessionInfo> availableSessions = new List<SessionInfo>();
+    public List<SessionInfo> availableSessions = new List<SessionInfo>();
+
+    public event Action onSessionListUpdated;
+    public static PhotonManager _PhotonManager;
     #region Metodos de Photon
     /// <summary>
-    /// 
     /// Callback es algo que se manda a llamar automaticamente cuando otro proceso termina
     /// 
     /// Network Runner es tu instancia de la partida
-    /// </summary>
-
     /// <summary>
     /// El siguiente paso es tener registrados que jugadores estan entrando
     /// </summary>
@@ -79,6 +79,7 @@ public class PhotonManager : MonoBehaviour, INetworkRunnerCallbacks
     public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
     {
         availableSessions = sessionList;
+        onSessionListUpdated?.Invoke();
     }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
     {
